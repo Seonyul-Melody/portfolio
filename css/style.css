@@ -364,7 +364,7 @@ h3 { margin: 0 0 14px; font-family: "Noto Sans KR", sans-serif; font-weight: 900
 @media (orientation: portrait) {   /* 세로 화면: 배지를 오른쪽 위로, 말풍선은 배지 아래로 */
   #pb { top: calc(14px + env(safe-area-inset-top, 0px)); bottom: auto; right: 14px; width: 60px; height: 60px; }
   #pb .spk { font-size: 15px; }
-  #pb .tip, #pb:hover .tip, #pb:focus-visible .tip { right: 50%; left: auto; top: calc(100% + 9px); transform: translateX(50%); font-size: 0; padding: 4px 10px; }   /* 짧게 '프로필'만 */
+  #pb .tip, #pb:hover .tip, #pb:focus-visible .tip { opacity: 1; right: 50%; left: auto; top: calc(100% + 9px); transform: translateX(50%); font-size: 0; padding: 4px 10px; }   /* 짧게 '프로필'만 */
   #pb .tip::before { content: "프로필"; font-size: .78rem; }
   #pb .tip::after { left: 50%; top: auto; bottom: 100%; margin: 0 0 0 -6px; border-color: transparent; border-bottom-color: rgba(255,255,255,.9); }
   #pp { top: calc(116px + env(safe-area-inset-top, 0px)); bottom: auto; max-height: calc(100svh - 136px); overflow: auto; transform-origin: 100% 0; }

@@ -89,7 +89,7 @@ function show(k) {
       '<div class="sec"><h3>기획서</h3><div id="pin"><div class="stg">' +
         '<div class="chs" id="chs">' + chapters + '</div>' +
         '<div class="sl" id="sl"><button class="nv p" aria-label="이전 장">‹</button><img alt=""><button class="nv n" aria-label="다음 장">›</button></div>' +
-        '<div class="pg"><i id="pgi"></i><span class="mo" id="pgn"></span></div>' +
+        '<div class="pg"><button class="nv nv2 p2" aria-label="이전 장">‹</button><i id="pgi"></i><span class="mo" id="pgn"></span><button class="nv nv2 n2" aria-label="다음 장">›</button></div>' +   /* 폰에서는 화살표가 진행 표시줄 양옆에 */
         '<p class="hint">이미지를 누르면 크게 볼 수 있어요</p>' +
       '</div></div>' +
       (d.note ? '<p class="note">' + d.note + '</p>' : '') +   /* 작품 안내 문구 (기획서 바로 아래) */
@@ -113,6 +113,8 @@ function show(k) {
   $("#chs").onclick = function (e) { var b = e.target.closest(".ch"); if (b) nav(+b.dataset.i); };
   $("#sl .p").onclick = function (e) { e.stopPropagation(); nav(IDX - 1); };
   $("#sl .n").onclick = function (e) { e.stopPropagation(); nav(IDX + 1); };
+  $(".pg .p2").onclick = function () { nav(IDX - 1); };
+  $(".pg .n2").onclick = function () { nav(IDX + 1); };
   $("#sl img").onclick = function () { $("#z img").src = this.src; $("#z").classList.add("on"); };
   var sx = 0;   /* 모바일: 옆으로 밀어서 넘기기 */
   $("#sl").addEventListener("touchstart", function (e) { sx = e.touches[0].clientX; }, { passive: true });
@@ -141,6 +143,12 @@ function setPage(i, animate) {
   var on = 0;
   WORLDS[cur].chapters.forEach(function (c, j) { if (i >= c[1]) on = j; });
   document.querySelectorAll(".ch").forEach(function (b, j) { b.classList.toggle("on", j === on); });
+  /* 지금 챕터 버튼이 보이도록 버튼 줄을 옆으로 자동 이동 (폰에서 버튼이 넘칠 때) */
+  var chs = $("#chs"), onBtn = document.querySelectorAll(".ch")[on];
+  if (chs && onBtn && chs.scrollWidth > chs.clientWidth) {
+    var cr = chs.getBoundingClientRect(), br = onBtn.getBoundingClientRect();
+    chs.scrollTo({ left: chs.scrollLeft + (br.left - cr.left) - (chs.clientWidth - br.width) / 2, behavior: reduceMotion ? "auto" : "smooth" });
+  }
   $("#pgi").style.setProperty("--f", ((i + 1) / N * 100) + "%");
   $("#pgn").textContent = (i + 1) + " / " + N;
 }

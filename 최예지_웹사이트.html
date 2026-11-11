@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>최예지 | 콘텐츠 마케터</title>
+
+  <!-- 글꼴 (구글 폰트) -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Black+Han+Sans&family=Cormorant+Garamond:ital,wght@1,700&family=Great+Vibes&family=Gowun+Dodum&family=Montserrat:wght@500;600;800&family=Noto+Sans+KR:wght@400;500;900&display=swap" rel="stylesheet">
+
+  <!-- 디자인 -->
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+  <!-- =====================================================
+       1. 입구
+       가로 화면용(.sh)과 세로 화면용(.sv) 두 벌이 있어요.
+       문 위치는 각 button의 style(left/top/width/height, 그림 대비 %)로 맞춰요.
+       ===================================================== -->
+  <section id="entry" aria-label="입구">
+
+    <!-- 1-1. 가로 화면 -->
+    <div class="st sh">
+      <div class="z"><div class="bg"></div><div class="fx"></div></div>
+      <button class="hit hp" data-w="pink" style="left:10.8%;top:15.8%;width:26.4%;height:68.2%" aria-label="분홍 세계 열기: 에이블리">
+        <span class="lb">공감으로<br>설계하는 기획</span>
+      </button>
+      <button class="hit hb" data-w="blue" style="left:64.8%;top:19.8%;width:24.8%;height:63.2%" aria-label="파랑 세계 열기: 포켓몬 챔피언스">
+        <span class="lb">연출로<br>말하는 기획</span>
+      </button>
+    </div>
+
+    <!-- 1-2. 세로 화면 (모바일) -->
+    <div class="st sv">
+      <div class="z"><div class="bg"></div><div class="fx"></div></div>
+      <button class="hit hp" data-w="pink" style="left:8.5%;top:44.2%;width:29%;height:23.2%" aria-label="분홍 세계 열기: 에이블리">
+        <span class="lb">공감으로<br>설계하는 기획</span>
+      </button>
+      <button class="hit hb" data-w="blue" style="left:66.2%;top:44.2%;width:26.2%;height:21.5%" aria-label="파랑 세계 열기: 포켓몬 챔피언스">
+        <span class="lb">연출로<br>말하는 기획</span>
+      </button>
+    </div>
+
+    <!-- 1-3. Portfolio 타이틀 -->
+    <div class="ttl">
+      <svg viewBox="0 0 200 44" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" aria-hidden="true">
+        <path d="M100 4l4 12 12 4-12 4-4 12-4-12-12-4 12-4z" fill="#fff" stroke="none"/>
+        <path d="M82 22H44c-10 0-14-8-8-12s12 2 6 6"/><path d="M118 22h38c10 0 14-8 8-12s-12 2-6 6"/>
+        <circle cx="26" cy="22" r="2.5" fill="#fff" stroke="none"/><circle cx="174" cy="22" r="2.5" fill="#fff" stroke="none"/>
+      </svg>
+      <p class="kick">Content Marketer</p>
+      <div class="tt"><h1 class="h2" aria-label="최예지 포트폴리오"><span class="cp" aria-hidden="true">P</span><span class="rest" aria-hidden="true">ortfolio</span></h1></div>
+      <p class="nmn">CHOI YEJI</p>
+    </div>
+  </section>
+
+
+  <!-- =====================================================
+       2. 세계 (분홍/파랑) — 내용은 js/data.js, 그리는 코드는 js/main.js 4번
+       ===================================================== -->
+  <div id="cv"></div>   <!-- 세계 이동 때 번지는 원 -->
+  <main id="w"></main>
+
+
+  <!-- =====================================================
+       3. 영상 창 · 기획서 확대 창
+       ===================================================== -->
+  <div id="m" role="dialog" aria-modal="true" aria-label="영상"><div id="mb"></div><button id="mx" aria-label="닫기">×</button></div>
+  <div id="z" role="dialog" aria-label="기획서 확대"><img alt=""><button id="zx" aria-label="닫기">×</button></div>
+
+
+  <!-- =====================================================
+       4. 프로필 창 (입구 오른쪽 아래 '프로필' 버튼으로 열림)
+       ===================================================== -->
+  <div id="pp" role="dialog" aria-label="프로필"></div>   <!-- 내용은 js/data.js의 SITE.profile에서 채워져요 -->
+  <button id="pb" aria-expanded="false" aria-label="프로필 보기"><span class="ring"></span><img src="images/profile/chibi-face.webp" alt=""><span class="spk">✦</span><span class="tip">프로필 보기</span></button>
+
+  
+  <!-- 내용 데이터 → 동작 순서로 불러와요 -->
+  <script src="js/data.js"></script>
+  <script src="js/main.js"></script>
+</body>
+</html>

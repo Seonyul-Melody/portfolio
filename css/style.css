@@ -186,8 +186,8 @@ button { font: inherit; color: inherit; cursor: pointer; }
 .thumb { position: relative; display: block; width: 100%; aspect-ratio: 16 / 9; border: 0; padding: 0; overflow: hidden; border-radius: var(--r); }
 .thumb img { width: 100%; height: 100%; object-fit: cover; transition: transform .6s; }
 .thumb:hover img { transform: scale(1.04); }
-.play { position: absolute; left: 50%; top: 50%; width: 84px; height: 84px; margin: -42px; border-radius: 50%; background: var(--ac); display: grid; place-items: center; transition: transform .3s; }
-.play::after { content: ""; border-left: 24px solid #fff; border-block: 14px solid transparent; margin-left: 6px; }
+.play { --ps: clamp(52px, 12vw, 84px); position: absolute; left: 50%; top: 50%; width: var(--ps); height: var(--ps); margin: calc(var(--ps) / -2); border-radius: 50%; background: var(--ac); display: grid; place-items: center; transition: transform .3s; }   /* 재생 버튼: 폰에서는 작게 */
+.play::after { content: ""; border-left: calc(var(--ps) * .29) solid #fff; border-block: calc(var(--ps) * .17) solid transparent; margin-left: calc(var(--ps) * .07); }
 .thumb:hover .play { transform: scale(1.15); }
 
 .it { margin-top: 14px; padding: 12px 4px; }   /* 제목 구간 (바탕 없음) */
@@ -305,9 +305,14 @@ h3 { margin: 0 0 14px; font-family: "Noto Sans KR", sans-serif; font-weight: 900
 .bd.m { font-weight: 700; }                                                                      /* 성과 배지 */
 #w[data-w=pink] .bd.m { color: #C9638F; background: rgba(255,225,238,.85); border-color: rgba(212,122,162,.5); }
 #w[data-w=blue] .bd.m { color: #CFE8FF; background: rgba(80,150,255,.25); border-color: rgba(156,208,255,.5); }
-@media (max-width: 760px) {
-  .pfa { grid-template-columns: 1fr; }
-  .pfi { max-width: 260px; }
+@media (max-width: 760px) {   /* 폰: 동그란 캐릭터가 카드 위에 걸치고, 소개는 가운데 정렬 */
+  .pfc { margin-top: 84px; padding-top: 0; }
+  .pfa { grid-template-columns: 1fr; justify-items: center; text-align: center; row-gap: 0; }
+  .pfa > div { width: 100%; }
+  .pfi { width: 160px; border-radius: 50%; margin-top: -80px; border: 4px solid #fff; box-shadow: 0 10px 28px rgba(120,60,140,.28); }
+  .pfn { margin-top: 12px; }
+  .pfe { margin-top: 10px; }
+  .sk { text-align: left; }
   .pfg { grid-template-columns: 1fr; }
 }
 
@@ -356,9 +361,16 @@ h3 { margin: 0 0 14px; font-family: "Noto Sans KR", sans-serif; font-weight: 900
 #pb .tip::after { content: ""; position: absolute; left: 100%; top: 50%; margin-top: -6px; border: 6px solid transparent; border-left-color: rgba(255,255,255,.9); }
 #pb:hover .tip, #pb:focus-visible .tip { opacity: 1; transform: translate(0, -50%); }
 @media (hover: none) { #pb .tip { opacity: 1; transform: translate(0, -50%); } }   /* 폰: 말풍선 항상 보이기 */
+@media (orientation: portrait) {   /* 세로 화면: 배지를 오른쪽 위로, 말풍선은 배지 아래로 */
+  #pb { top: calc(14px + env(safe-area-inset-top, 0px)); bottom: auto; right: 14px; width: 60px; height: 60px; }
+  #pb .spk { font-size: 15px; }
+  #pb .tip, #pb:hover .tip, #pb:focus-visible .tip { right: 50%; left: auto; top: calc(100% + 9px); transform: translateX(50%); font-size: 0; padding: 4px 10px; }   /* 짧게 '프로필'만 */
+  #pb .tip::before { content: "프로필"; font-size: .78rem; }
+  #pb .tip::after { left: 50%; top: auto; bottom: 100%; margin: 0 0 0 -6px; border-color: transparent; border-bottom-color: rgba(255,255,255,.9); }
+  #pp { top: calc(116px + env(safe-area-inset-top, 0px)); bottom: auto; max-height: calc(100svh - 136px); overflow: auto; transform-origin: 100% 0; }
+}
 @keyframes pbspin { to { transform: rotate(360deg); } }
 @keyframes pbtw { 50% { opacity: .4; transform: scale(.7); } }
-
 #pp { position: fixed; right: 16px; bottom: calc(116px + env(safe-area-inset-bottom, 0px)); z-index: 30; width: min(360px, calc(100vw - 32px)); background: var(--surf); color: var(--ink); border-radius: 20px; padding: 22px; box-shadow: 0 12px 40px rgba(0,0,0,.3); transform-origin: 100% 100%; transform: scale(.85); opacity: 0; visibility: hidden; transition: transform .3s, opacity .3s, visibility .3s; }
 #pp.on { transform: none; opacity: 1; visibility: visible; }
 #pp h4 { margin: 0; font-size: 1.3rem; }

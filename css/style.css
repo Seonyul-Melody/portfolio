@@ -345,7 +345,7 @@ h3 { margin: 0 0 14px; font-family: "Noto Sans KR", sans-serif; font-weight: 900
 #w[data-w=blue] .more { --tc: #1F6FE8; --gc: rgba(80,170,255,.55); }
 
 /* 잠깐 뜨는 안내 */
-.toast { position: fixed; left: 50%; bottom: 28px; transform: translateX(-50%); z-index: 70; background: rgba(20,16,40,.85); color: #fff; padding: 10px 18px; border-radius: 999px; font-size: .9rem; opacity: 0; transition: opacity .3s; pointer-events: none; }
+.toast { position: fixed; left: 50%; bottom: calc(28px + env(safe-area-inset-bottom, 0px)); transform: translateX(-50%); z-index: 70; background: rgba(20,16,40,.85); color: #fff; padding: 10px 20px; border-radius: 999px; font-size: .9rem; white-space: nowrap; text-align: center; max-width: calc(100vw - 32px); opacity: 0; transition: opacity .3s; pointer-events: none; }   /* 한 줄, 가운데 정렬 */
 .toast.on { opacity: 1; }
 
 
@@ -357,9 +357,9 @@ h3 { margin: 0 0 14px; font-family: "Noto Sans KR", sans-serif; font-weight: 900
 #mb p { position: absolute; left: 0; right: 0; bottom: 0; margin: 0; padding: 14px; background: rgba(0,0,0,.6); color: #fff; text-align: center; font-size: .95rem; }
 #mx, #zx { position: fixed; top: calc(12px + env(safe-area-inset-top, 0px)); right: 16px; width: 44px; height: 44px; border-radius: 50%; border: 0; background: #fff; color: #111; font-size: 1.4rem; z-index: 61; }
 #mx { position: absolute; }
-#z { position: fixed; inset: 0; z-index: 60; background: rgba(6,7,18,.92); overflow: auto; display: none; }
-#z.on { display: block; }
-#z img { display: block; width: max(100vw, 1200px); height: auto; }
+#z { position: fixed; inset: 0; z-index: 60; background: rgba(6,7,18,.92); overflow: hidden; display: none; touch-action: none; }
+#z.on { display: flex; align-items: center; justify-content: center; }
+#z img { display: block; width: 100%; max-width: 1600px; height: auto; transform-origin: center; touch-action: none; user-select: none; -webkit-user-drag: none; cursor: grab; will-change: transform; }   /* 처음엔 화면 폭에 맞추고, 손가락·휠로 확대 */
 
 
 /* ===== 15. 프로필 버튼 · 프로필 창 ===== */

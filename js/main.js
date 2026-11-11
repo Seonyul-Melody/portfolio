@@ -20,7 +20,7 @@ var $ = function (s) { return document.querySelector(s); };
 var W = $("#w"), M = $("#m"), MB = $("#mb");
 var reduceMotion = matchMedia("(prefers-reduced-motion:reduce)").matches;
 var desktop = matchMedia("(min-width:901px) and (hover:hover)");  /* 넓은 화면 + 마우스: 스크롤로 기획서 넘김 */
-var cur = "pink", IDX = 0, N = 0, pin = null;
+var cur = "pink", IDX = 0, N = 0, pin = null, PRE = [], SWAP = 0;
 
 
 /* ===== 2. 반짝이 · 꽃잎 만들기 =====
@@ -59,6 +59,7 @@ function show(k) {
   cur = k;
   var d = WORLDS[k], other = k === "pink" ? "blue" : "pink";
   N = d.docs.length; IDX = -1;
+  PRE = d.docs.map(function (src) { var im = new Image(); im.src = src; return im; });   /* 기획서 이미지를 미리 받아 둬서 넘길 때 끊기지 않게 */
 
   var scenes = d.scenes.map(function (s, i) {
     return '<figure><img src="' + s[0] + '" alt="장면 ' + (i + 1) + '" loading="lazy"><figcaption class="mo">' + String(i + 1).padStart(2, "0") + '</figcaption></figure>';
@@ -115,7 +116,7 @@ function show(k) {
   $("#sl .n").onclick = function (e) { e.stopPropagation(); nav(IDX + 1); };
   $(".pg .p2").onclick = function () { nav(IDX - 1); };
   $(".pg .n2").onclick = function () { nav(IDX + 1); };
-  $("#sl img").onclick = function () { $("#z img").src = this.src; $("#z").classList.add("on"); };
+  $("#sl img").onclick = function () { openZoom(this.src); };
   var sx = 0;   /* 모바일: 옆으로 밀어서 넘기기 */
   $("#sl").addEventListener("touchstart", function (e) { sx = e.touches[0].clientX; }, { passive: true });
   $("#sl").addEventListener("touchend", function (e) { var dx = e.changedTouches[0].clientX - sx; if (Math.abs(dx) > 50) nav(IDX + (dx < 0 ? 1 : -1)); });
@@ -131,15 +132,20 @@ function setPage(i, animate) {
   i = Math.max(0, Math.min(N - 1, i));
   if (i === IDX) return;
   var old = IDX; IDX = i;
-  var im = $("#sl img");
-  im.src = WORLDS[cur].docs[i];
-  im.alt = "기획서 " + (i + 1) + "쪽";
-  if (animate && !reduceMotion && old >= 0) {
+  var im = $("#sl img"), src = WORLDS[cur].docs[i], token = ++SWAP;
+  /* 다음 이미지가 다 준비된 뒤에 바꾸고 움직여요 (중간에 또 넘기면 마지막 것만 반영) */
+  var next = new Image(); next.src = src;
+  (next.decode ? next.decode() : Promise.resolve()).catch(function () {}).then(function () {
+    if (token !== SWAP) return;
+    im.src = src;
+    im.alt = "기획서 " + (i + 1) + "쪽";
+    if (animate && !reduceMotion && old >= 0) {
     im.animate(cur === "pink"
       ? [{ opacity: 0, transform: "translateY(24px)" }, { opacity: 1, transform: "none" }]                       /* 분홍: 아래에서 떠오름 */
       : [{ opacity: 0, transform: "translateX(" + (i > old ? 40 : -40) + "px)" }, { opacity: 1, transform: "none" }], /* 파랑: 옆에서 밀려옴 */
       { duration: cur === "pink" ? 450 : 220, easing: "ease-out" });
-  }
+    }
+  });
   var on = 0;
   WORLDS[cur].chapters.forEach(function (c, j) { if (i >= c[1]) on = j; });
   document.querySelectorAll(".ch").forEach(function (b, j) { b.classList.toggle("on", j === on); });
@@ -173,10 +179,49 @@ function openVideo() {
 }
 function closeVideo() { M.classList.remove("on"); MB.innerHTML = ""; }
 function closeZoom() { $("#z").classList.remove("on"); }
+
+/* 기획서 확대 창: 두 손가락 확대·축소, 한 손가락 이동, 두 번 탭 2.5배, PC는 마우스 휠 */
+var ZI = $("#z img"), ZS = { s: 1, x: 0, y: 0 }, ZP = new Map(), ZB = null, lastTap = 0;
+function zApply() { ZI.style.transform = "translate(" + ZS.x + "px," + ZS.y + "px) scale(" + ZS.s + ")"; }
+function zReset() { ZS = { s: 1, x: 0, y: 0 }; zApply(); }
+function zBase() {   /* 손가락 수가 바뀔 때마다 기준점을 다시 잡아요 */
+  var p = Array.from(ZP.values());
+  ZB = { s: ZS.s, x: ZS.x, y: ZS.y, p: p.map(function (q) { return { x: q.x, y: q.y }; }) };
+  if (p.length === 2) ZB.d = Math.hypot(p[0].x - p[1].x, p[0].y - p[1].y);
+}
+function openZoom(src) { ZI.src = src; zReset(); $("#z").classList.add("on"); }
+ZI.addEventListener("pointerdown", function (e) {
+  e.preventDefault(); ZI.setPointerCapture(e.pointerId);
+  ZP.set(e.pointerId, { x: e.clientX, y: e.clientY }); zBase();
+  var now = Date.now();
+  if (ZP.size === 1 && now - lastTap < 300) { ZS = ZS.s > 1 ? { s: 1, x: 0, y: 0 } : { s: 2.5, x: 0, y: 0 }; zApply(); lastTap = 0; } else lastTap = now;
+});
+ZI.addEventListener("pointermove", function (e) {
+  if (!ZP.has(e.pointerId) || !ZB) return;
+  ZP.set(e.pointerId, { x: e.clientX, y: e.clientY });
+  var p = Array.from(ZP.values());
+  if (p.length === 2 && ZB.d) {
+    var d = Math.hypot(p[0].x - p[1].x, p[0].y - p[1].y);
+    ZS.s = Math.max(1, Math.min(4, ZB.s * d / ZB.d));
+    ZS.x = ZB.x + ((p[0].x + p[1].x) - (ZB.p[0].x + ZB.p[1].x)) / 2;
+    ZS.y = ZB.y + ((p[0].y + p[1].y) - (ZB.p[0].y + ZB.p[1].y)) / 2;
+  } else if (p.length === 1 && ZS.s > 1) {
+    ZS.x = ZB.x + p[0].x - ZB.p[0].x; ZS.y = ZB.y + p[0].y - ZB.p[0].y;
+  }
+  zApply();
+});
+function zUp(e) { ZP.delete(e.pointerId); if (ZS.s <= 1) zReset(); zBase(); }
+ZI.addEventListener("pointerup", zUp); ZI.addEventListener("pointercancel", zUp);
+$("#z").addEventListener("wheel", function (e) {
+  e.preventDefault();
+  ZS.s = Math.max(1, Math.min(4, ZS.s * (e.deltaY < 0 ? 1.15 : 1 / 1.15)));
+  if (ZS.s === 1) { ZS.x = 0; ZS.y = 0; }
+  zApply();
+}, { passive: false });
 $("#mx").onclick = closeVideo;
 M.onclick = function (e) { if (e.target === M) closeVideo(); };
 $("#zx").onclick = closeZoom;
-$("#z").onclick = function (e) { if (e.target.tagName !== "BUTTON") closeZoom(); };
+$("#z").onclick = function (e) { if (e.target === $("#z")) closeZoom(); };   /* 이미지 바깥(어두운 곳)을 누르면 닫혀요 */
 
 
 /* ===== 7. 키보드 ===== */

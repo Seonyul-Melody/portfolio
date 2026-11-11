@@ -272,6 +272,18 @@ h3 { margin: 0 0 14px; font-family: "Noto Sans KR", sans-serif; font-weight: 900
 .pg i { flex: 1; height: 6px; border-radius: 3px; background: var(--bd); position: relative; overflow: hidden; }
 .pg i::after { content: ""; position: absolute; inset: 0 auto 0 0; width: var(--f, 0%); background: var(--ac); transition: width .35s; }
 .hint { font-size: .85rem; color: var(--tx2); margin: 6px 0 0; text-align: center; }
+.nv2 { display: none; }   /* 진행 표시줄 옆 화살표: 폰에서만 */
+@media (max-width: 760px) {   /* 폰: 화살표는 이미지 밖으로, 버튼은 한 줄 + 오른쪽 끝 흐려짐 */
+  .stg { padding: 10px 8px 8px; }
+  .sl { border-radius: 6px; }
+  .sl .nv { display: none; }
+  .chs { gap: 6px; padding: 2px 40px 10px 2px; -webkit-mask-image: linear-gradient(90deg, #000 82%, transparent); mask-image: linear-gradient(90deg, #000 82%, transparent); }
+  .ch { font-size: .85rem; padding: 4px 12px; border-width: 1.5px; }
+  .pg { gap: 8px; margin-top: 10px; }
+  .pg .nv2 { display: grid; place-items: center; position: static; flex: none; margin: 0; width: 34px; height: 34px; font-size: 1.25rem; box-shadow: 0 2px 8px rgba(0,0,0,.12); }
+  #pgn { font-size: .85rem; }
+  .hint { font-size: .78rem; margin-top: 4px; }
+}
 
 
 /* ===== 13. 세계 — 작품 안내 문구 · 프로필 카드 · 더 많은 작품 버튼 ===== */

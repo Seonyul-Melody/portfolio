@@ -3,20 +3,7 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-  <title>최예지 | 콘텐츠 마케터 포트폴리오</title>
-
-  <!-- 검색 · 링크 미리보기 -->
-  <meta name="description" content="기획부터 제작까지, 브랜드의 이야기를 콘텐츠로 만듭니다. 콘텐츠 마케터 최예지의 포트폴리오.">
-  <meta property="og:type" content="website">
-  <meta property="og:title" content="최예지 | 콘텐츠 마케터 포트폴리오">
-  <meta property="og:description" content="기획부터 제작까지, 브랜드의 이야기를 콘텐츠로 만듭니다.">
-  <meta property="og:image" content="https://seonyul-melody.github.io/portfolio/images/og/og-image.jpg">
-  <meta property="og:url" content="https://seonyul-melody.github.io/portfolio/">
-  <meta name="twitter:card" content="summary_large_image">
-
-  <!-- 탭 아이콘 -->
-  <link rel="icon" type="image/png" href="images/profile/favicon.png">
-  <link rel="apple-touch-icon" href="images/profile/apple-touch-icon.png">
+  <title>최예지 | 콘텐츠 마케터</title>
 
   <!-- 글꼴 (구글 폰트) -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -68,6 +55,46 @@
       <div class="tt"><h1 class="h2" aria-label="최예지 포트폴리오"><span class="cp" aria-hidden="true">P</span><span class="rest" aria-hidden="true">ortfolio</span></h1></div>
       <p class="nmn">CHOI YEJI</p>
     </div>
+    <a class="cue" href="#plaza" aria-label="아래로 스크롤"><span>scroll</span>▼</a>   <!-- 아래로 내려가는 안내 -->
+  </section>
+
+
+  <!-- =====================================================
+       1-4. 입구 아래 별빛 광장 (How I Work · Works · 마무리)
+       ===================================================== -->
+  <div class="veil" aria-hidden="true"></div>   <!-- 스크롤하면 배경 전체를 한 번에 흐리게 덮는 막 (css 17번, js 11번) -->
+
+  <section id="plaza" aria-label="일하는 방식과 작품">
+    <div class="pz-cont" aria-hidden="true"></div>   <!-- 입구 그림이 아래로 이어지는 부분 (위치는 js 10번이 맞춰요) -->
+    <div class="fx"></div>
+
+    <div class="pz-sec" id="how">
+      <div class="rv"><p class="pz-k">How I Work</p>
+      <h2 class="pz-t">이렇게 일해요</h2></div>
+      <!-- 각 단계의 <div class="sim"></div> 안에 <img src="images/workflow/01.jpg" alt=""> 처럼 넣으면 이미지가 들어가요 -->
+      <ol class="steps">
+        <li class="rv"><div class="sim"><img src="images/workflow/01.jpg" alt="리서치 · 인사이트"></div><span class="mo">01</span><b>리서치 · 인사이트</b><small>시장과 사용자를 분석해 핵심 고민을 찾습니다.</small></li>
+        <li class="rv"><div class="sim"><img src="images/workflow/02.jpg" alt="기획 · 스토리보드"></div><span class="mo">02</span><b>기획 · 스토리보드</b><small>인사이트를 메시지와 장면으로 설계합니다.</small></li>
+        <li class="rv"><div class="sim"><img src="images/workflow/03.jpg" alt="AI 기술 활용"></div><span class="mo">03</span><b>AI 기술 활용</b><small><small>생성형 AI를 활용해 아이디어를 빠르게 장면으로 구현합니다.</small></small></li>
+        <li class="rv"><div class="sim"><img src="images/workflow/04.jpg" alt="편집 · 모션"></div><span class="mo">04</span><b>편집 · 모션</b><small>컷의 흐름과 움직임을 세심하게 다듬어 영상에 디테일을 더합니다.</small></li>
+        <li class="rv"><div class="sim"><img src="images/workflow/05.jpg" alt="성과 분석 · 개선"></div><span class="mo">05</span><b>성과 분석 · 개선</b><small>반응을 분석해 다음 콘텐츠를 개선합니다.</small></li>
+      </ol>
+    </div>
+
+    <div class="pz-sec rv" id="works">
+      <h2 class="pz-k big">Another World</h2>
+      <button class="gate" id="moreAll" aria-label="또 다른 작품 보러가기 (준비 중)">   <!-- 세 번째 통로: 작품 목록 페이지로 -->
+        <span class="gate-art"><span class="gate-glow"></span><img class="gate-img" src="images/gate/gate-closed.webp" alt=""><span class="gate-rays"></span></span>   <!-- 문 일러스트 + 마우스를 올리면 새어 나오는 빛 -->
+        <span class="gate-lb">또 다른 작품 보러가기</span>
+      </button>
+    </div>
+
+    <div class="pz-sec pz-end rv">
+      <p class="pz-k">Contact</p>
+      <p class="pz-q">기획부터 제작까지, 브랜드의 이야기를 콘텐츠로 만듭니다.</p>
+      <p class="pz-mail mo">artj0@naver.com</p>
+      <button class="pz-top" id="toTop">맨 위로</button>
+    </div>
   </section>
 
 
@@ -91,7 +118,7 @@
   <div id="pp" role="dialog" aria-label="프로필"></div>   <!-- 내용은 js/data.js의 SITE.profile에서 채워져요 -->
   <button id="pb" aria-expanded="false" aria-label="프로필 보기"><span class="ring"></span><img src="images/profile/chibi-face.webp" alt=""><span class="spk">✦</span><span class="tip">프로필 보기</span></button>
 
-  
+
   <!-- 내용 데이터 → 동작 순서로 불러와요 -->
   <script src="js/data.js"></script>
   <script src="js/main.js"></script>

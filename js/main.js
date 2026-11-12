@@ -11,6 +11,7 @@
    8. 프로필 (세계 하단 카드 · 입구 프로필 창)
    9. 타이틀 i 위에 별 놓기
    10. 입구 그림을 화면 높이에 맞추기
+   11. 입구 아래 별빛 광장 (스크롤 등장 · 작품 카드)
    ========================================================= */
 
 
@@ -100,7 +101,7 @@ function show(k) {
       '<div class="morew"><button class="more" id="more">더 많은 작품이 궁금하다면?</button></div>' +
     '</div>';
 
-  $("#entry").style.display = "none";
+  $("#entry").style.display = "none"; $("#plaza").style.display = "none"; $(".veil").style.display = "none";
   W.style.display = "block";
   $("#pb").style.display = "none"; profile(false);   /* 프로필 버튼은 입구에서만 */
   fx($("#w>.fx"), 16, 6);
@@ -108,7 +109,7 @@ function show(k) {
   pin = $("#pin"); layViewer(); setPage(0, false);
 
   /* 버튼 연결 */
-  $("#bk").onclick = function () { W.style.display = "none"; $("#entry").style.display = "block"; $("#pb").style.display = ""; profile(false); stars(); fitEntry(); };
+  $("#bk").onclick = function () { W.style.display = "none"; $("#entry").style.display = "block"; $("#plaza").style.display = ""; $(".veil").style.display = ""; $("#pb").style.display = ""; profile(false); stars(); fitEntry(); };
   $("#ot").onclick = function (e) { var r = e.currentTarget.getBoundingClientRect(); go(other, r.left + r.width / 2, r.top + r.height / 2); };
   $("#th").onclick = openVideo;
   $("#chs").onclick = function (e) { var b = e.target.closest(".ch"); if (b) nav(+b.dataset.i); };
@@ -312,8 +313,39 @@ function fitEntry() {
     st.style.setProperty("--sy", Math.max(0, Math.min(over, maxShift)) + "px");
     var rest = bottom() - (innerHeight - 16);
     if (rest > 0) st.style.setProperty("--lm", rest + "px");
+    /* 입구 그림 확장본(.pz-cont)을 입구와 같은 크기·위치로 이어 붙이기
+       EXT = 확장본의 세로/가로 비율 (PC 6792/2752, 폰 6206/1536) */
+    var r = st.getBoundingClientRect(), top = r.top + scrollY, vis = $("#entry").offsetHeight - top;
+    var EXT = st.classList.contains("sv") ? 6206 / 1536 : 6792 / 2752, pc = $("#plaza");
+    pc.style.setProperty("--cw", r.width + "px");
+    pc.style.setProperty("--cy", -vis + "px");
+    pc.style.setProperty("--ch", Math.max(0, r.width * EXT - vis) + "px");
   });
 }
+
+/* ===== 11. 입구 아래 별빛 광장 =====
+   화면에 들어오면 떠오르며 나타나고(.rv → .in), 작품 카드를 누르면 그 세계로 가요 */
+fx($("#plaza > .fx"), 26, 0);
+var RV = "IntersectionObserver" in window ? new IntersectionObserver(function (es) {
+  es.forEach(function (e) { if (e.isIntersecting) { e.target.classList.add("in"); RV.unobserve(e.target); } });
+}, { threshold: .15, rootMargin: "0px 0px -12% 0px" }) : null;   /* 화면 아래쪽 12% 위로 올라와야 나타나요 */
+document.querySelectorAll(".rv").forEach(function (el) { if (RV) RV.observe(el); else el.classList.add("in"); });
+document.querySelectorAll(".card[data-go]").forEach(function (cd) {
+  cd.onclick = function (e) { go(cd.dataset.go, e.clientX || innerWidth / 2, e.clientY || innerHeight / 2); };
+});
+$("#moreAll").onclick = function () { toast("작품 목록 페이지는 준비 중이에요"); };   /* 작품 목록 페이지가 생기면 여기서 연결 */
+/* 아래로 스크롤할수록 배경을 흐리게 (화면 높이의 70%를 내리면 가장 흐려져요) */
+var blurTick = false;
+function blurBg() {
+  blurTick = false;
+  var p = Math.max(0, Math.min(1, scrollY / (innerHeight * .45))), s = document.documentElement.style;
+  s.setProperty("--bo", p.toFixed(2));                                   /* 배경 흐림 */
+  s.setProperty("--uo", Math.max(0, 1 - p * 1.6).toFixed(2));            /* 타이틀이 먼저 사라짐 */
+  s.setProperty("--co", Math.max(0, 1 - scrollY / 120).toFixed(2));      /* scroll 안내는 120px만 내려도 사라짐 */
+}
+addEventListener("scroll", function () { if (!blurTick) { blurTick = true; requestAnimationFrame(blurBg); } }, { passive: true });
+blurBg();
+$("#toTop").onclick = function () { scrollTo({ top: 0, behavior: reduceMotion ? "auto" : "smooth" }); };
 
 var fontsReady = document.fonts ? document.fonts.ready : Promise.resolve();
 fontsReady.then(function () { stars(); fitEntry(); });

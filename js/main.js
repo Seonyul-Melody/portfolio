@@ -121,7 +121,7 @@ function show(k) {
   var sx = 0;   /* 모바일: 옆으로 밀어서 넘기기 */
   $("#sl").addEventListener("touchstart", function (e) { sx = e.touches[0].clientX; }, { passive: true });
   $("#sl").addEventListener("touchend", function (e) { var dx = e.changedTouches[0].clientX - sx; if (Math.abs(dx) > 50) nav(IDX + (dx < 0 ? 1 : -1)); });
-  $("#more").onclick = function () { toast("작품 목록 페이지는 준비 중이에요"); };   /* 작품 목록 페이지가 생기면 여기서 연결 */
+  $("#more").onclick = function () { location.href = "works.html"; };   /* 작품 목록 페이지로 */
 }
 
 
@@ -333,7 +333,16 @@ document.querySelectorAll(".rv").forEach(function (el) { if (RV) RV.observe(el);
 document.querySelectorAll(".card[data-go]").forEach(function (cd) {
   cd.onclick = function (e) { go(cd.dataset.go, e.clientX || innerWidth / 2, e.clientY || innerHeight / 2); };
 });
-$("#moreAll").onclick = function () { toast("작품 목록 페이지는 준비 중이에요"); };   /* 작품 목록 페이지가 생기면 여기서 연결 */
+$("#moreAll").onclick = function () {   /* 세 번째 문: 문 안쪽 빛이 화면 가득 퍼지며 works.html로 */
+  if (reduceMotion) { location.href = "works.html"; return; }
+  var r = this.querySelector(".gate-img").getBoundingClientRect(), v = document.createElement("div");
+  v.id = "gateFx";
+  v.style.cssText = "position:fixed;inset:0;z-index:100;pointer-events:none;opacity:0;transition:opacity .7s ease;background:radial-gradient(circle at " + (r.left + r.width * .52) + "px " + (r.top + r.height * .5) + "px,#FFF0B8,#F2B8E8 25%,#A77CF0 55%,#5B44C8)";
+  document.body.appendChild(v);
+  requestAnimationFrame(function () { v.style.opacity = 1; });
+  setTimeout(function () { location.href = "works.html"; }, 750);
+};
+addEventListener("pageshow", function () { var v = $("#gateFx"); if (v) v.remove(); });   /* 뒤로 가기로 돌아왔을 때 빛 지우기 */
 /* 아래로 스크롤할수록 배경을 흐리게 (화면 높이의 70%를 내리면 가장 흐려져요) */
 var blurTick = false;
 function blurBg() {

@@ -54,7 +54,8 @@ h2{margin:0 0 22px;font-size:clamp(1.5rem,3vw,2rem);font-weight:900;line-height:
 .phones{display:grid;grid-template-columns:1fr 1fr;gap:clamp(12px,2vw,22px)}
 .ph{margin:0}
 .ph .fr{position:relative;aspect-ratio:9/16;border-radius:26px;overflow:hidden;border:3px solid rgba(255,255,255,.85);background:#000;box-shadow:0 16px 40px rgba(0,0,30,.55),0 0 30px rgba(160,200,255,.25)}
-.ph video{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;display:block}
+.ph video{position:absolute;inset:0;width:100%;height:100%;object-fit:contain;display:block;background:#000}
+.ph video:fullscreen{object-fit:contain}.ph video:-webkit-full-screen{object-fit:contain}   /* 전체 화면에서도 세로 영상이 잘리지 않게 */
 .ph figcaption{margin-top:10px;text-align:center}
 .ph b{display:block;font-size:1rem}
 .ph small{color:var(--mute);font-size:.86rem}

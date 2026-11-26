@@ -349,6 +349,7 @@ function blurBg() {
   blurTick = false;
   var p = Math.max(0, Math.min(1, scrollY / (innerHeight * .45))), s = document.documentElement.style;
   s.setProperty("--bo", p.toFixed(2));                                   /* 배경 흐림 */
+  $(".veil").classList.toggle("off", p === 0);                          /* 맨 위에서는 흐림 막 끄기 */
   s.setProperty("--uo", Math.max(0, 1 - p * 1.6).toFixed(2));            /* 타이틀이 먼저 사라짐 */
   s.setProperty("--co", Math.max(0, 1 - scrollY / 120).toFixed(2));      /* scroll 안내는 120px만 내려도 사라짐 */
 }
